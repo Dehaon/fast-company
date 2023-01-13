@@ -11,7 +11,7 @@ const User = ({
   completedMeetings,
   rate,
   bookmark,
-  onUserBookmarkIconClick,
+  onUserBookmarkIconClick
 }) => {
   return (
     <tr>

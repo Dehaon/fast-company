@@ -23,8 +23,6 @@ function App() {
     setUsers(newUsers);
   };
 
-  if (users.length === 0) return <SearchStatus numberOfGuests={users.length} />;
-
   return (
     <>
       <SearchStatus numberOfGuests={users.length} />
