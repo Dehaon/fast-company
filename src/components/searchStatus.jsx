@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const SearchStatus = ({ numberOfGuests }) => {
   const renderPhrase = (number) => {
@@ -10,17 +11,23 @@ const SearchStatus = ({ numberOfGuests }) => {
       ? (phrase += two)
       : (phrase += one);
 
-    return number === 0 ? (
-      <span className="badge bg-danger">
-        <h1>Никто не тусанет с тобой сегодня</h1>
-      </span>
-    ) : (
-      <span className="badge bg-primary">
-        <h1>{phrase}</h1>
-      </span>
-    );
+    return number === 0
+      ? (
+        <span className="badge bg-danger">
+          <h1>Никто не тусанет с тобой сегодня</h1>
+        </span>
+      )
+      : (
+        <span className="badge bg-primary">
+          <h1>{phrase}</h1>
+        </span>
+      );
   };
   return renderPhrase(numberOfGuests);
+};
+
+SearchStatus.propTypes = {
+  numberOfGuests: PropTypes.number.isRequired
 };
 
 export default SearchStatus;
