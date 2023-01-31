@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const Bookmark = ({ id, mark, onToggleBookmark }) => {
   const handleClick = () => {
@@ -43,6 +44,12 @@ const Bookmark = ({ id, mark, onToggleBookmark }) => {
       {renderIcon()}
     </button>
   );
+};
+
+Bookmark.propTypes = {
+  id: PropTypes.string.isRequired,
+  mark: PropTypes.bool.isRequired,
+  onToggleBookmark: PropTypes.func.isRequired
 };
 
 export default Bookmark;

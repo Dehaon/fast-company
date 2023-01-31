@@ -1,9 +1,9 @@
 import React from "react";
 import Quality from "./quality";
 import Bookmark from "./bookmark";
+import PropTypes from "prop-types";
 
 const User = ({
-  onDeleteUser,
   _id,
   name,
   qualities,
@@ -11,6 +11,7 @@ const User = ({
   completedMeetings,
   rate,
   bookmark,
+  onDeleteUser,
   onUserBookmarkIconClick
 }) => {
   return (
@@ -41,6 +42,18 @@ const User = ({
       </td>
     </tr>
   );
+};
+
+User.propTypes = {
+  _id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  qualities: PropTypes.arrayOf(PropTypes.object).isRequired,
+  profession: PropTypes.object.isRequired,
+  completedMeetings: PropTypes.number.isRequired,
+  rate: PropTypes.number.isRequired,
+  bookmark: PropTypes.bool.isRequired,
+  onDeleteUser: PropTypes.func.isRequired,
+  onUserBookmarkIconClick: PropTypes.func.isRequired
 };
 
 export default User;
