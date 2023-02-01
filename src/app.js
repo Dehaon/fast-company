@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Users from "./components/users";
-import SearchStatus from "./components/searchStatus";
 import api from "./api/index";
 
 function App() {
@@ -25,8 +24,6 @@ function App() {
 
   return (
     <>
-      <SearchStatus numberOfGuests={users.length} />
-
       <Users
         users={users}
         onDeleteButtonClick={handleDelete}
