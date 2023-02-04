@@ -1,11 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Bookmark = ({ id, mark, onToggleBookmark }) => {
-  const handleClick = () => {
-    onToggleBookmark(id);
-  };
-
+const Bookmark = ({ mark, ...rest }) => {
   const heart = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -40,16 +36,14 @@ const Bookmark = ({ id, mark, onToggleBookmark }) => {
   };
 
   return (
-    <button className="btn btn-sm btn-outline-dark" onClick={handleClick}>
+    <button className="btn btn-sm btn-outline-dark" {...rest}>
       {renderIcon()}
     </button>
   );
 };
 
 Bookmark.propTypes = {
-  id: PropTypes.string.isRequired,
-  mark: PropTypes.bool.isRequired,
-  onToggleBookmark: PropTypes.func.isRequired
+  mark: PropTypes.bool.isRequired
 };
 
 export default Bookmark;
