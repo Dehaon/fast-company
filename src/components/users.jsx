@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import api from "../api";
 import GroupList from "./groupList";
 import SearchStatus from "./searchStatus";
+import _ from "lodash";
 
 const Users = ({
   users: allUsers,
@@ -18,7 +19,7 @@ const Users = ({
   const pageSize = 4;
 
   useEffect(() => {
-    console.log("send request");
+    // console.log("send request");
     api.professions.fetchAll().then((data) => setProfessions(data));
   }, []);
 
@@ -28,7 +29,6 @@ const Users = ({
 
   const handleProfessionSelect = (item) => {
     setSelectedProf(item);
-    // console.log(params);
   };
 
   const handlePageChange = (pageIndex) => {
@@ -36,7 +36,7 @@ const Users = ({
   };
 
   const filtredUsers = selectedProf
-    ? allUsers.filter((user) => user.profession === selectedProf)
+    ? allUsers.filter((user) => _.isEqual(user.profession, selectedProf))
     : allUsers;
 
   const count = filtredUsers.length;
