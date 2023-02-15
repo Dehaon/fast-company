@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import SortingMark from "./sortingMark";
 
 const TableHeader = ({ selectedSort, onSort, columns }) => {
   const handleSort = (item) => {
@@ -28,6 +29,12 @@ const TableHeader = ({ selectedSort, onSort, columns }) => {
             scope="col"
           >
             {columns[column].name}
+            {
+              <SortingMark
+                selectedSort={selectedSort}
+                columnPath={columns[column].path}
+              />
+            }
           </th>
         ))}
       </tr>
