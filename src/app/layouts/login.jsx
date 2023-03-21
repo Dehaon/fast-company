@@ -8,7 +8,7 @@ const Login = () => {
 
   const handleChange = ({ target }) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
-    // console.log(e.target.name);
+    // console.log(target.name);
   };
 
   const validatorConfig = {
