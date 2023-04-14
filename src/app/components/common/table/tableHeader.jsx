@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import SortingMark from "./sortingMark";
+import SortingMark from "../../ui/sortingMark";
 
 const TableHeader = ({ selectedSort, onSort, columns }) => {
   const handleSort = (item) => {

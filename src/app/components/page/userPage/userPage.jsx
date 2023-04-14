@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import api from "../api";
+import api from "../../../api";
 import { useHistory } from "react-router-dom";
-import QualitiesList from "./qualitiesList";
+import QualitiesList from "../../ui/qualities/qualitiesList";
 
-const User = ({ id }) => {
+const UserPage = ({ id }) => {
   const history = useHistory();
   const [user, setUser] = useState();
   //   console.log(id);
 
   useEffect(() => {
     api.users.getById(id).then((data) => setUser(data));
-  });
+  }, []);
 
   const handleToList = () => {
     history.push("/users");
@@ -49,8 +49,8 @@ const User = ({ id }) => {
   return "loading...";
 };
 
-User.propTypes = {
+UserPage.propTypes = {
   id: PropTypes.string.isRequired
 };
 
-export default User;
+export default UserPage;
