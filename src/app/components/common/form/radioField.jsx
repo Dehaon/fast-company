@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const RadionField = ({ label, options, name, onChange, value }) => {
+const RadioField = ({ label, options, name, onChange, value }) => {
   const handleChange = ({ target }) => {
     onChange({ name: target.name, value: target.value });
   };
@@ -30,7 +30,7 @@ const RadionField = ({ label, options, name, onChange, value }) => {
   );
 };
 
-RadionField.propTypes = {
+RadioField.propTypes = {
   options: PropTypes.array,
   name: PropTypes.string,
   onChange: PropTypes.func,
@@ -38,4 +38,4 @@ RadionField.propTypes = {
   label: PropTypes.string
 };
 
-export default RadionField;
+export default RadioField;

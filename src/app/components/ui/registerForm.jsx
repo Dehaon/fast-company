@@ -3,7 +3,7 @@ import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
 import api from "../../api";
 import SelectField from "../common/form/selectField";
-import RadionField from "../common/form/radionField";
+import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxField from "../common/form/checkBoxField";
 
@@ -18,11 +18,24 @@ const RegisterForm = () => {
   });
   const [professions, setProfessions] = useState();
   const [errors, setErrors] = useState({});
-  const [qualities, setQualities] = useState({});
+  const [qualities, setQualities] = useState([]);
 
   useEffect(() => {
-    api.professions.fetchAll().then((data) => setProfessions(data));
-    api.qualities.fetchAll().then((data) => setQualities(data));
+    api.professions.fetchAll().then((data) => {
+      const professionsList = Object.keys(data).map((professionName) => ({
+        label: data[professionName].name,
+        value: data[professionName]._id
+      }));
+      setProfessions(professionsList);
+    });
+    api.qualities.fetchAll().then((data) => {
+      const qualitiesList = Object.keys(data).map((qualityName) => ({
+        label: data[qualityName].name,
+        value: data[qualityName]._id,
+        color: data[qualityName].color
+      }));
+      setQualities(qualitiesList);
+    });
   }, []);
   // console.log(professions);
 
@@ -69,11 +82,38 @@ const RegisterForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const isValid = validate();
-    if (!isValid) {
-      // eslint-disable-next-line no-useless-return
-      return;
-    }
+    if (!isValid) return;
+    const { profession, qualities } = data;
+    console.log({
+      ...data,
+      profession: getProfessionById(profession),
+      qualities: getQualities(qualities)
+    });
   };
+
+  function getProfessionById(id) {
+    for (const prof of professions) {
+      if (prof.value === id) {
+        return { _id: prof.value, name: prof.label };
+      }
+    }
+  }
+
+  function getQualities(elements) {
+    const qualitiesArray = [];
+    for (const elem of elements) {
+      for (const quality of qualities) {
+        if (elem.value === quality.value) {
+          qualitiesArray.push({
+            _id: quality.value,
+            name: quality.label,
+            color: quality.color
+          });
+        }
+      }
+    }
+    return qualitiesArray;
+  }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -93,7 +133,7 @@ const RegisterForm = () => {
         error={errors.password}
       />
       <SelectField
-        name="professions"
+        name="profession"
         value={data.profession}
         onChange={handleChange}
         label="Выберете вашу профессию"
@@ -101,7 +141,7 @@ const RegisterForm = () => {
         options={professions}
         error={errors.profession}
       />
-      <RadionField
+      <RadioField
         name="sex"
         value={data.sex}
         onChange={handleChange}

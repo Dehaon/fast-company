@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import React from "react";
 import Select from "react-select";
 import PropTypes from "prop-types";
@@ -6,15 +5,7 @@ import PropTypes from "prop-types";
 const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
   const optionsArray =
     !Array.isArray(options) && typeof options === "object"
-      ? Object.keys(options).map((optionName) => ({
-          label: options[optionName].name,
-          value: options[optionName]._id
-        }))
-      : Array.isArray(options)
-      ? options.map((option) => ({
-          label: option.name,
-          value: option._id
-        }))
+      ? Object.values(options)
       : options;
 
   const handleChange = (value) => {
