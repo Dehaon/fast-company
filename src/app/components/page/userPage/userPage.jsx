@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import api from "../../../api";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import QualitiesList from "../../ui/qualities/qualitiesList";
 
 const UserPage = ({ id }) => {
@@ -30,8 +30,15 @@ const UserPage = ({ id }) => {
             <h4>{`Встреч: ${user.completedMeetings}`}</h4>
             <h5>{`Рейтинг: ${user.rate}`}</h5>
             <div className="d-grid gap-2 d-md-flex justigy-content-md-start mb-4 mb-lg-3">
+              <Link
+                className="btn btn-primary px-4 me-md-2 fw-bold"
+                to={`/users/${id}/edit`}
+                role="button"
+              >
+                Изменить пользователя
+              </Link>
               <button
-                className="btn btn-primary btn-lg px-4 me-md-2 fw-bold"
+                className="btn btn-primary px-4 me-md-2 fw-bold"
                 onClick={() => handleToList()}
               >
                 Вернуться к списку
