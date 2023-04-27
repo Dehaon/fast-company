@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
 import api from "../../api";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxField from "../common/form/checkBoxField";
+import validation from "../../utils/validation";
 
 const RegisterForm = () => {
   const [data, setData] = useState({
@@ -37,34 +37,9 @@ const RegisterForm = () => {
       setQualities(qualitiesList);
     });
   }, []);
-  // console.log(professions);
 
   const handleChange = (target) => {
     setData((prevState) => ({ ...prevState, [target.name]: target.value }));
-  };
-
-  const validatorConfig = {
-    email: {
-      isRequired: { message: "Электронная почта обязательна для заполнения" },
-      isEmail: { message: "Email введен некорректно" }
-    },
-    password: {
-      isRequired: { message: "Пароль обязателен для заполнения" },
-      isCapitalSymbol: {
-        message: "Пароль должен содержать хотя бы одну заглавную букву"
-      },
-      isContainDigit: { message: "Пароль должен содержать хотя бы одну цифру" },
-      min: { message: "Пароль должен состоять минимум из 8 символов", value: 8 }
-    },
-    profession: {
-      isRequired: { message: "Обязательно выберете вашу профессию" }
-    },
-    licence: {
-      isRequired: {
-        message:
-          "Вы не можите использовать наш сервис без подтверждения лицензионого соглашения"
-      }
-    }
   };
 
   useEffect(() => {
@@ -72,6 +47,7 @@ const RegisterForm = () => {
   }, [data]);
 
   const validate = () => {
+    const { validator, validatorConfig } = validation;
     const errors = validator(data, validatorConfig);
     setErrors(errors);
     return Object.keys(errors).length === 0;
