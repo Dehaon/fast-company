@@ -19,6 +19,12 @@ const validatorConfig = {
       message:
         "Вы не можите использовать наш сервис без подтверждения лицензионого соглашения"
     }
+  },
+  userId: {
+    isRequired: { message: "Обязательно выберете пользователя" }
+  },
+  content: {
+    isRequired: { message: "Поле не может быть пустым" }
   }
 };
 
