@@ -3,15 +3,14 @@ import PropTypes from "prop-types";
 import SelectField from "../../common/form/selectField";
 import api from "../../../api";
 import validation from "../../../utils/validation";
-import TextArea from "../../common/form/textArea";
+import TextAreaField from "../form/textAreaField";
+const initialObject = {
+  userId: "",
+  content: ""
+};
 
-const AddCommentForm = ({ onSubmit, pageId }) => {
+const AddCommentForm = ({ onSubmit }) => {
   const [users, setUsers] = useState();
-  const initialObject = {
-    userId: "",
-    pageId,
-    content: ""
-  };
   const [comment, setComment] = useState(initialObject);
   const [errors, setErrors] = useState({});
 
@@ -62,7 +61,7 @@ const AddCommentForm = ({ onSubmit, pageId }) => {
         options={users}
         error={errors.userId}
       />
-      <TextArea
+      <TextAreaField
         name="content"
         value={comment.content}
         rows="3"
@@ -78,8 +77,7 @@ const AddCommentForm = ({ onSubmit, pageId }) => {
 };
 
 AddCommentForm.propTypes = {
-  onSubmit: PropTypes.func,
-  pageId: PropTypes.string
+  onSubmit: PropTypes.func
 };
 
 export default AddCommentForm;
