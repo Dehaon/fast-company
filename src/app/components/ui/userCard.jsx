@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 const UserCard = ({ name, profession, rate, id }) => {
+  // history.push(history.location.pathname + "edit")
   return (
     <div className="card mb-3">
       <div className="card-body">

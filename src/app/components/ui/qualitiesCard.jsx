@@ -1,24 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Qualities from "./qualities";
 
-const QualitiesCard = ({ children }) => {
+const QualitiesCard = ({ data }) => {
   return (
     <div className="card mb-3">
       <div className="card-body d-flex flex-column justify-content-centr text-center">
         <h5 className="card-title">
           <span>Качества: </span>{" "}
         </h5>
-        <p className="card-text">{children}</p>
+        <p className="card-text">
+          <Qualities qualities={data} />
+        </p>
       </div>
     </div>
   );
 };
 
 QualitiesCard.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node
-  ])
+  data: PropTypes.array.isRequired
 };
 
 export default QualitiesCard;
