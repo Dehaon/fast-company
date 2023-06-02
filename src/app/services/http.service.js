@@ -1,12 +1,41 @@
+/* eslint-disable indent */
 import axios from "axios";
 // import logger from "./log.service";
 import { toast } from "react-toastify";
-import config from "../config.json";
+import configFile from "../config.json";
 
-axios.defaults.baseURL = config.apiEndpoint;
+axios.defaults.baseURL = configFile.apiEndpoint;
+
+axios.interceptors.request.use(
+  function (config) {
+    if (configFile.isFirebase) {
+      const containSlash = /\/$/gi.test(config.url);
+      config.url =
+        (containSlash ? config.url.slice(0, -1) : config.url) + ".json";
+    }
+    // console.log(config.url);
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
+
+function transformData(data) {
+  return data
+    ? Object.keys(data).map((key) => ({
+        ...data[key]
+      }))
+    : [];
+}
 
 axios.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    if (configFile.isFirebase) {
+      response.data = { content: transformData(response.data) };
+    }
+    return response;
+  },
   function (error) {
     const expectedErrors =
       error.response &&
