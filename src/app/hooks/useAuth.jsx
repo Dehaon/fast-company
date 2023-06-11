@@ -5,7 +5,12 @@ import userService from "../services/user.service";
 import { toast } from "react-toastify";
 import { setTokens } from "../services/localStorage.service";
 
-const httpAuth = axios.create();
+const httpAuth = axios.create({
+  baseURL: "https://identitytoolkit.googleapis.com/v1/",
+  params: {
+    key: process.env.REACT_APP_FIREBASE_KEY
+  }
+});
 const AuthContext = React.createContext();
 
 export const useAuth = () => {
@@ -17,14 +22,15 @@ export const AuthProvider = ({ children }) => {
   const [errors, setErrors] = useState(null);
 
   async function signUp({ email, password, ...rest }) {
-    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_KEY}`;
     try {
-      const { data } = await httpAuth.post(url, {
+      const { data } = await httpAuth.post(`accounts:signUp`, {
         email,
         password,
         returnSecureToken: true
       });
       setTokens(data);
+
+      console.log(rest);
 
       await createUser({
         _id: data.localId,
@@ -32,7 +38,7 @@ export const AuthProvider = ({ children }) => {
         ...rest
       });
 
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       errorCatcher(error);
       const { code, message } = error.response.data.error;
@@ -49,9 +55,52 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  async function signIn({ email, password }) {
+    try {
+      const { data } = await httpAuth.post(`accounts:signInWithPassword`, {
+        email,
+        password,
+        returnSecureToken: true
+      });
+      setTokens(data);
+      console.log(data);
+
+      await getUser(data.localId);
+    } catch (error) {
+      errorCatcher(error);
+      const { code, message } = error.response.data.error;
+      console.log(code, message);
+      if (code === 400) {
+        if (message === "EMAIL_NOT_FOUND") {
+          const errorObject = {
+            email: "Нет записи пользователя, соответствующей этому Email"
+          };
+          throw errorObject;
+        } else if (message === "INVALID_PASSWORD") {
+          const errorObject = {
+            password: "Пароль недействителен"
+          };
+          throw errorObject;
+        }
+      }
+      // throw new Error();
+    }
+  }
+
   async function createUser(data) {
     try {
       const { content } = userService.create(data);
+      console.log(content);
+      setCurrentUser(content);
+    } catch (error) {
+      errorCatcher(error);
+    }
+  }
+
+  async function getUser(id) {
+    try {
+      const { content } = userService.getById(id);
+      console.log(content);
       setCurrentUser(content);
     } catch (error) {
       errorCatcher(error);
@@ -71,7 +120,7 @@ export const AuthProvider = ({ children }) => {
   }, [errors]);
 
   return (
-    <AuthContext.Provider value={{ signUp, currentUser }}>
+    <AuthContext.Provider value={{ signUp, signIn, currentUser }}>
       {children}
     </AuthContext.Provider>
   );
