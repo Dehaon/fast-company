@@ -6,13 +6,7 @@ import Table from "../common/table";
 import NameLink from "./nameLink";
 import Profession from "./profession";
 
-const UsersTable = ({
-  users,
-  onSort,
-  selectedSort,
-  onToggleBookmark,
-  onDelete
-}) => {
+const UsersTable = ({ users, onSort, selectedSort, onToggleBookmark }) => {
   const columns = {
     name: {
       path: "name",
@@ -38,16 +32,6 @@ const UsersTable = ({
           onClick={() => onToggleBookmark(user._id)}
         />
       )
-    },
-    delete: {
-      component: (user) => (
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => onDelete(user._id)}
-        >
-          Удалить
-        </button>
-      )
     }
   };
   return <Table {...{ selectedSort, onSort, columns, data: users }} />;
@@ -57,8 +41,7 @@ UsersTable.propTypes = {
   users: PropTypes.array.isRequired,
   onSort: PropTypes.func.isRequired,
   selectedSort: PropTypes.object.isRequired,
-  onToggleBookmark: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onToggleBookmark: PropTypes.func.isRequired
 };
 
 export default UsersTable;

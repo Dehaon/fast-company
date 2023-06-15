@@ -1,28 +1,11 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import SelectField from "../../common/form/selectField";
-import api from "../../../api";
 import validation from "../../../utils/validation";
 import TextAreaField from "../form/textAreaField";
-const initialObject = {
-  userId: "",
-  content: ""
-};
 
 const AddCommentForm = ({ onSubmit }) => {
-  const [users, setUsers] = useState();
-  const [comment, setComment] = useState(initialObject);
+  const [comment, setComment] = useState({});
   const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    api.users.fetchAll().then((data) => {
-      const usersList = data.map((user) => ({
-        label: user.name,
-        value: user._id
-      }));
-      setUsers(usersList);
-    });
-  }, []);
 
   const handleChange = (target) => {
     setComment((prevState) => ({ ...prevState, [target.name]: target.value }));
@@ -46,24 +29,20 @@ const AddCommentForm = ({ onSubmit }) => {
     const isValid = validate();
     if (!isValid) return;
     onSubmit(comment);
-    console.log(comment);
-    setComment(initialObject);
+    clearForm();
   };
+
+  function clearForm() {
+    setComment({});
+    setErrors({});
+  }
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Новый комментарий</h2>
-      <SelectField
-        name="userId"
-        value={comment.userId}
-        onChange={handleChange}
-        defaultOption="Выберете пользователя"
-        options={users}
-        error={errors.userId}
-      />
       <TextAreaField
         name="content"
-        value={comment.content}
+        value={comment.content || ""}
         rows="3"
         label="Сообщение"
         onChange={handleChange}

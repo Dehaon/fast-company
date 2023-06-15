@@ -1,37 +1,26 @@
-import React, { useState, useEffect } from "react";
-import api from "../../api";
-import { useParams } from "react-router-dom";
+import React from "react";
 import CommentsList, { AddCommentForm } from "../common/comments";
+import { useComments } from "../../hooks/useComments";
 
 const Comments = () => {
-  const [comments, setComments] = useState([]);
-  const { userId } = useParams();
+  const { comments, createComment, removeComment } = useComments();
   // console.log(comments);
 
-  useEffect(() => {
-    api.comments.fetchCommentsForUser(userId).then((data) => {
-      const sortedComments = data.sort((a, b) => b.created_at - a.created_at);
-      setComments(sortedComments);
-    });
-  }, []);
-
   const handleRemoveComment = (commentId) => {
-    api.comments.remove(commentId);
-    const filtredComments = comments.filter(
-      (comment) => comment._id !== commentId
-    );
-    return setComments(filtredComments);
+    removeComment(commentId);
+    // api.comments.remove(commentId).then((commentId) => {
+    //   setComments(comments.filter((comment) => comment._id !== commentId));
+    // });
   };
 
   const handleAddComment = (data) => {
-    // console.log(data);
-    api.comments.add({ ...data, pageId: userId }).then((data) => {
-      const sortedComments = [...comments, data].sort(
-        (a, b) => b.created_at - a.created_at
-      );
-      setComments(sortedComments);
-    });
+    createComment(data);
+    // api.comments
+    //   .add({ ...data, pageId: userId })
+    //   .then((data) => setComments([...comments, data]));
   };
+
+  const sortedComments = comments.sort((a, b) => b.created_at - a.created_at);
 
   return (
     <>
@@ -46,7 +35,10 @@ const Comments = () => {
           <div className="card-body">
             <h2>Комментарии:</h2>
             <hr />
-            <CommentsList comments={comments} onDelete={handleRemoveComment} />
+            <CommentsList
+              comments={sortedComments}
+              onDelete={handleRemoveComment}
+            />
           </div>
         </div>
       )}
