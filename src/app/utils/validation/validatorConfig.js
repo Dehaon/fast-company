@@ -3,6 +3,10 @@ const validatorConfig = {
     isRequired: { message: "Электронная почта обязательна для заполнения" },
     isEmail: { message: "Email введен некорректно" }
   },
+  name: {
+    isRequired: { message: "Имя обязательно для заполнения" },
+    min: { message: "Имя должено состоять минимум из 3 символов", value: 3 }
+  },
   password: {
     isRequired: { message: "Пароль обязателен для заполнения" },
     isCapitalSymbol: {
@@ -19,9 +23,6 @@ const validatorConfig = {
       message:
         "Вы не можите использовать наш сервис без подтверждения лицензионого соглашения"
     }
-  },
-  userId: {
-    isRequired: { message: "Обязательно выберете пользователя" }
   },
   content: {
     isRequired: { message: "Поле не может быть пустым" }

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import api from "../../../api";
 import { displayDate } from "../../../utils/reformDate";
+import { useUser } from "../../../hooks/useUsers";
+import { useAuth } from "../../../hooks/useAuth";
 
 const Comment = ({
   userId,
@@ -10,12 +11,9 @@ const Comment = ({
   onDelete,
   _id: id
 }) => {
-  const [userName, setUserName] = useState();
-  // console.log(id);
-  useEffect(() => {
-    api.users.getById(userId).then((data) => setUserName(data.name));
-  }, []);
-  // displayDate(createdTime);
+  const { getUserById } = useUser();
+  const user = getUserById(userId);
+  const { currentUser } = useAuth();
 
   return (
     <div className="bg-light card-body mb-3">
@@ -23,11 +21,7 @@ const Comment = ({
         <div className="col">
           <div className="d-flex flex-start">
             <img
-              src={`https://avatars.dicebear.com/api/avataaars/${(
-                Math.random() + 1
-              )
-                .toString(36)
-                .substring(7)}.svg`}
+              src={user.image}
               className="rounded-circle shadow-1-strong me-3"
               alt="avatar"
               width="65"
@@ -37,15 +31,17 @@ const Comment = ({
               <div className="mb-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <p className="mb-1">
-                    {userName || " "}{" "}
+                    {user.name || " "}{" "}
                     <span className="small">{displayDate(createdTime)}</span>
                   </p>
-                  <button
-                    className="btn btn-sm text-primary d-flex align-items-center"
-                    onClick={() => onDelete(id)}
-                  >
-                    <i className="bi bi-x-lg" />
-                  </button>
+                  {currentUser._id === userId && (
+                    <button
+                      className="btn btn-sm text-primary d-flex align-items-center"
+                      onClick={() => onDelete(id)}
+                    >
+                      <i className="bi bi-x-lg" />
+                    </button>
+                  )}
                 </div>
                 <p className="small mb-0">{content}</p>
               </div>
@@ -59,7 +55,7 @@ const Comment = ({
 
 Comment.propTypes = {
   userId: PropTypes.string,
-  created_at: PropTypes.string,
+  created_at: PropTypes.number,
   content: PropTypes.string,
   _id: PropTypes.string,
   onDelete: PropTypes.func

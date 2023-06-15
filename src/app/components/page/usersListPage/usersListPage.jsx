@@ -1,30 +1,33 @@
+/* eslint-disable indent */
 import React, { useState, useEffect } from "react";
 import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
-import api from "../../../api";
 import GroupList from "../../common/groupList";
 import SearchStatus from "../../ui/searchStatus";
 import _ from "lodash";
 import UsersTable from "../../ui/usersTable";
 import Search from "../../ui/search";
 import { useUser } from "../../../hooks/useUsers";
+import { useProfession } from "../../../hooks/useProfession";
+import { useAuth } from "../../../hooks/useAuth";
 
 const UsersListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [professions, setProfessions] = useState();
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
   const pageSize = 8;
   const [search, setSearch] = useState("");
 
+  const { professions, isLoading: professionsLoading } = useProfession();
   const { users } = useUser();
-  console.log(users);
+  const { currentUser } = useAuth();
+  // console.log(users);
 
-  const handleDelete = (userId) => {
-    // const newUsers = users.filter((user) => user._id !== userId);
-    // setUsers(newUsers);
-    console.log(userId);
-  };
+  // const handleDelete = (userId) => {
+  //   // const newUsers = users.filter((user) => user._id !== userId);
+  //   // setUsers(newUsers);
+  //   console.log(userId);
+  // };
 
   const handleToggleBookmark = (id) => {
     const newUsers = users.map((user) => {
@@ -37,10 +40,6 @@ const UsersListPage = () => {
     // setUsers(newUsers);
     console.log(newUsers);
   };
-
-  useEffect(() => {
-    api.professions.fetchAll().then((data) => setProfessions(data));
-  }, []);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -67,19 +66,35 @@ const UsersListPage = () => {
   };
 
   if (users) {
-    let filtredUsers;
-    if (selectedProf) {
-      filtredUsers = users.filter((user) =>
-        _.isEqual(user.profession, selectedProf)
-      );
-    } else if (search) {
-      const searchRegExp = new RegExp(search.trim().toLowerCase());
-      filtredUsers = users.filter((user) =>
-        searchRegExp.test(user.name.toLowerCase())
-      );
-    } else {
-      filtredUsers = users;
+    // let filtredUsers;
+    // if (selectedProf) {
+    //   filtredUsers = users.filter((user) =>
+    //     _.isEqual(user.profession, selectedProf)
+    //   );
+    // } else if (search) {
+    //   const searchRegExp = new RegExp(search.trim().toLowerCase());
+    //   filtredUsers = users.filter((user) =>
+    //     searchRegExp.test(user.name.toLowerCase())
+    //   );
+    // } else {
+    //   filtredUsers = users;
+    // }
+
+    function filterUsers(data) {
+      const filtredUsers = search
+        ? data.filter(
+            (user) =>
+              user.name.toLowerCase().indexOf(search.toLowerCase()) !== -1
+          )
+        : selectedProf
+        ? data.filter(
+            (user) =>
+              JSON.stringify(user.profession) === JSON.stringify(selectedProf)
+          )
+        : data;
+      return filtredUsers.filter((user) => user._id !== currentUser._id);
     }
+    const filtredUsers = filterUsers(users);
 
     const count = filtredUsers.length;
 
@@ -93,7 +108,7 @@ const UsersListPage = () => {
 
     return (
       <div className="d-flex">
-        {professions && (
+        {professions && !professionsLoading && (
           <div className="d-flex flex-column flex-shrink-0 p-3">
             <GroupList
               items={professions}
@@ -113,7 +128,7 @@ const UsersListPage = () => {
               users={usersCrop}
               onSort={handleSort}
               selectedSort={sortBy}
-              onDelete={handleDelete}
+              // onDelete={handleDelete}
               onToggleBookmark={handleToggleBookmark}
             />
           )}

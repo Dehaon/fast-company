@@ -9,6 +9,7 @@
     "axios": "^1.4.0",
     "bootstrap": "^5.1.0",
     "lodash": "^4.17.15",
+    "nanoid": "^4.0.2",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -44,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-router-dom": "^5.3.3",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-standard": "^17.0.0",

@@ -1,24 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { useProfession } from "../../hooks/useProfession";
+import { useAuth } from "../../hooks/useAuth";
 
-const UserCard = ({ name, profession, rate, id }) => {
+const UserCard = ({ name, professionId, rate, id, image }) => {
   // history.push(history.location.pathname + "edit")
+
+  const { currentUser } = useAuth();
+
+  const { getProfessionById } = useProfession();
+  const { name: professionName } = getProfessionById(professionId);
   return (
     <div className="card mb-3">
       <div className="card-body">
-        <Link to={`/users/${id}/edit`}>
-          <button className="position-absolute top-0 end-0 btn btn-light btn-sm">
-            <i className="bi bi-gear"></i>
-          </button>
-        </Link>
+        {currentUser._id === id && (
+          <Link to={`/users/${id}/edit`}>
+            <button className="position-absolute top-0 end-0 btn btn-light btn-sm">
+              <i className="bi bi-gear"></i>
+            </button>
+          </Link>
+        )}
         <div className="d-flex flex-columb align-items-center text-center position-relative">
           <img
-            src={`https://avatars.dicebear.com/api/avataaars/${(
-              Math.random() + 1
-            )
-              .toString(36)
-              .substring(7)}.svg`}
+            src={image}
             className="rounded-circle shadow-1-strong me-3"
             alt="avatar"
             width="65"
@@ -26,7 +31,7 @@ const UserCard = ({ name, profession, rate, id }) => {
           />
           <div className="mt-3">
             <h4>{name}</h4>
-            <p className="text-secondary mb-1">{profession}</p>
+            <p className="text-secondary mb-1">{professionName}</p>
             <div className="text-muted">
               <i className="bi bi-caret-down-fill text-primary" role="button" />
               <i className="bi bi-caret-up text-secondary" role="button" />
@@ -41,9 +46,10 @@ const UserCard = ({ name, profession, rate, id }) => {
 
 UserCard.propTypes = {
   name: PropTypes.string.isRequired,
-  profession: PropTypes.string.isRequired,
+  professionId: PropTypes.string.isRequired,
   rate: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  image: PropTypes.string
 };
 
 export default UserCard;
