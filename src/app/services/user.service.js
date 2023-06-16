@@ -15,6 +15,14 @@ const userService = {
   getCurrentUser: async () => {
     const { data } = await httpService.get(userEndpoint + getUserId());
     return data;
+  },
+  updateUser: async (payload) => {
+    // const { data } = await httpService.post(userEndpoint + payload._id, payload);
+    const { data } = await httpService.patch(
+      userEndpoint + getUserId(),
+      payload
+    );
+    return data;
   }
 };
 export default userService;
