@@ -7,11 +7,12 @@ import MeetingsCard from "../../ui/meetingsCard";
 import Comments from "../../ui/comments";
 import { useUser } from "../../../hooks/useUsers";
 import { CommentsProvider } from "../../../hooks/useComments";
-import { useProfession } from "../../../hooks/useProfession";
+import { useSelector } from "react-redux";
+import { getProfessionsLoadingStatus } from "../../../store/professions";
 
 const UserPage = ({ id }) => {
   const { getUserById } = useUser();
-  const { isLoading: professionLoading } = useProfession();
+  const professionLoading = useSelector(getProfessionsLoadingStatus());
 
   const user = getUserById(id);
 
