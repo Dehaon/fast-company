@@ -7,7 +7,11 @@ import MultiSelectField from "../../common/form/multiSelectField";
 import validation from "../../../utils/validation";
 import { useAuth } from "../../../hooks/useAuth";
 import { useProfession } from "../../../hooks/useProfession";
-import { useQuality } from "../../../hooks/useQuality";
+import { useSelector } from "react-redux";
+import {
+  getQualities,
+  getQualitiesLoadingStatus
+} from "../../../store/qualities";
 
 const EditUserPage = () => {
   const { userId } = useParams();
@@ -22,7 +26,8 @@ const EditUserPage = () => {
     label: p.name,
     value: p._id
   }));
-  const { qualities, isLoading: qualitiesLoading } = useQuality();
+  const qualities = useSelector(getQualities());
+  const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
   const qualitiesList = qualities.map((q) => ({
     label: q.name,
     value: q._id,

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Bookmark from "../common/bookmark";
+// import Bookmark from "../common/bookmark";
 import Qualities from "./qualities";
 import Table from "../common/table";
 import NameLink from "./nameLink";
@@ -22,17 +22,17 @@ const UsersTable = ({ users, onSort, selectedSort, onToggleBookmark }) => {
       component: (user) => <Profession id={user.profession} />
     },
     completedMeetings: { path: "completedMeetings", name: "Встретился, раз" },
-    rate: { path: "rate", name: "Оценка" },
-    bookmark: {
-      path: "bookmark",
-      name: "Избранное",
-      component: (user) => (
-        <Bookmark
-          mark={user.bookmark}
-          onClick={() => onToggleBookmark(user._id)}
-        />
-      )
-    }
+    rate: { path: "rate", name: "Оценка" }
+    // bookmark: {
+    //   path: "bookmark",
+    //   name: "Избранное",
+    //   component: (user) => (
+    //     <Bookmark
+    //       mark={user.bookmark}
+    //       onClick={() => onToggleBookmark(user._id)}
+    //     />
+    //   )
+    // }
   };
   return <Table {...{ selectedSort, onSort, columns, data: users }} />;
 };
