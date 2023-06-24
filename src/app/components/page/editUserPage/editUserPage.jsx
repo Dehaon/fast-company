@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import validation from "../../../utils/validation";
-import { useAuth } from "../../../hooks/useAuth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getQualities,
   getQualitiesLoadingStatus
@@ -15,16 +13,15 @@ import {
   getProfessions,
   getProfessionsLoadingStatus
 } from "../../../store/professions";
-import { getCurrentUserData } from "../../../store/users";
+import { getCurrentUserData, updateUser } from "../../../store/users";
+import BackHistoryButton from "../../common/backButton";
 
 const EditUserPage = () => {
-  const { userId } = useParams();
-  const history = useHistory();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [errors, setErrors] = useState({});
 
   const [user, setUser] = useState();
-  const { updateUser } = useAuth();
   const currentUser = useSelector(getCurrentUserData());
   const professions = useSelector(getProfessions());
   const professionsLoading = useSelector(getProfessionsLoadingStatus());
@@ -94,8 +91,7 @@ const EditUserPage = () => {
       ...user,
       qualities: user.qualities.map((quality) => quality.value)
     };
-    updateUser(editedUser);
-    history.push(`/users/${userId}`);
+    dispatch(updateUser(editedUser));
   };
 
   if (!isLoading && !professionsLoading && !qualitiesLoading) {
@@ -153,12 +149,13 @@ const EditUserPage = () => {
                 >
                   Обновить
                 </button>
-                <button
+                {/* <button
                   className="btn btn-secondary btn-lg px-4 me-md-2 fw-bold"
                   onClick={() => history.goBack()}
                 >
                   Назад
-                </button>
+                </button> */}
+                <BackHistoryButton styles="btn btn-secondary btn-lg px-4 me-md-2 fw-bold" />
               </div>
             </form>
           </div>
