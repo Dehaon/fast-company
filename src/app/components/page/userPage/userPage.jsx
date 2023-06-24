@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useHistory } from "react-router-dom";
 import UserCard from "../../ui/userCard";
 import QualitiesCard from "../../ui/qualitiesCard";
 import MeetingsCard from "../../ui/meetingsCard";
@@ -9,15 +8,11 @@ import { CommentsProvider } from "../../../hooks/useComments";
 import { useSelector } from "react-redux";
 import { getProfessionsLoadingStatus } from "../../../store/professions";
 import { getUserById } from "../../../store/users";
+import BackHistoryButton from "../../common/backButton";
 
 const UserPage = ({ id }) => {
   const user = useSelector(getUserById(id));
   const professionLoading = useSelector(getProfessionsLoadingStatus());
-
-  const handleToList = () => {
-    const history = useHistory();
-    history.push("/users");
-  };
 
   if (user && !professionLoading) {
     return (
@@ -34,12 +29,11 @@ const UserPage = ({ id }) => {
             <QualitiesCard data={user.qualities} />
             <MeetingsCard meetings={user.completedMeetings} />
             <div className="d-grid gap-2 d-md-flex justigy-content-md-start mb-4 mb-lg-3">
-              <button
-                className="btn btn-primary px-4 me-md-2 fw-bold"
-                onClick={() => handleToList()}
-              >
-                Вернуться к списку
-              </button>
+              <BackHistoryButton
+                styles="btn btn-primary px-4 me-md-2 fw-bold"
+                title="Вернуться к списку"
+                page="/users"
+              />
             </div>
           </div>
           <div className="col-md-8">
