@@ -15,6 +15,7 @@ import {
   getProfessions,
   getProfessionsLoadingStatus
 } from "../../../store/professions";
+import { getCurrentUserData } from "../../../store/users";
 
 const EditUserPage = () => {
   const { userId } = useParams();
@@ -23,7 +24,8 @@ const EditUserPage = () => {
   const [errors, setErrors] = useState({});
 
   const [user, setUser] = useState();
-  const { currentUser, updateUser } = useAuth();
+  const { updateUser } = useAuth();
+  const currentUser = useSelector(getCurrentUserData());
   const professions = useSelector(getProfessions());
   const professionsLoading = useSelector(getProfessionsLoadingStatus());
   const professionsList = professions.map((p) => ({
