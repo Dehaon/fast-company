@@ -7,13 +7,16 @@ import SearchStatus from "../../ui/searchStatus";
 import _ from "lodash";
 import UsersTable from "../../ui/usersTable";
 import Search from "../../ui/search";
-import { useUser } from "../../../hooks/useUsers";
-import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import {
   getProfessions,
   getProfessionsLoadingStatus
 } from "../../../store/professions";
+import {
+  getCurrentUserId,
+  getUsers,
+  getUsersLoadingStatus
+} from "../../../store/users";
 
 const UsersListPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,8 +27,9 @@ const UsersListPage = () => {
 
   const professions = useSelector(getProfessions());
   const professionsLoading = useSelector(getProfessionsLoadingStatus());
-  const { users } = useUser();
-  const { currentUser } = useAuth();
+  const users = useSelector(getUsers());
+  const usersLoading = useSelector(getUsersLoadingStatus());
+  const currentUserId = useSelector(getCurrentUserId());
   // console.log(users);
 
   // const handleDelete = (userId) => {
@@ -70,7 +74,7 @@ const UsersListPage = () => {
     setSelectedProf();
   };
 
-  if (users) {
+  if (!usersLoading) {
     // let filtredUsers;
     // if (selectedProf) {
     //   filtredUsers = users.filter((user) =>
@@ -97,7 +101,7 @@ const UsersListPage = () => {
               JSON.stringify(user.profession) === JSON.stringify(selectedProf)
           )
         : data;
-      return filtredUsers.filter((user) => user._id !== currentUser._id);
+      return filtredUsers.filter((user) => user._id !== currentUserId);
     }
     const filtredUsers = filterUsers(users);
 

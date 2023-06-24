@@ -1,20 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
 import { getProfessionById } from "../../store/professions";
 import { useSelector } from "react-redux";
+import { getCurrentUserId } from "../../store/users";
 
 const UserCard = ({ name, professionId, rate, id, image }) => {
   // history.push(history.location.pathname + "edit")
 
-  const { currentUser } = useAuth();
+  const currentUserId = useSelector(getCurrentUserId());
 
   const { name: professionName } = useSelector(getProfessionById(professionId));
   return (
     <div className="card mb-3">
       <div className="card-body">
-        {currentUser._id === id && (
+        {currentUserId === id && (
           <Link to={`/users/${id}/edit`}>
             <button className="position-absolute top-0 end-0 btn btn-light btn-sm">
               <i className="bi bi-gear"></i>
