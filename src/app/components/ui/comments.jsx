@@ -1,35 +1,37 @@
 import React, { useEffect } from "react";
 import CommentsList, { AddCommentForm } from "../common/comments";
-import { useComments } from "../../hooks/useComments";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  createComment,
   getComments,
   getCommentsLoadingStatus,
-  loadCommentsList
+  loadCommentsList,
+  removeComment
 } from "../../store/comments";
 import { useParams } from "react-router-dom";
 import { orderBy } from "lodash";
 
 const Comments = () => {
   const dispatch = useDispatch();
-  const { userId } = useParams();
-  useEffect(() => {
-    dispatch(loadCommentsList(userId));
-  }, [userId]);
+  const { userId: pageId } = useParams();
   const isLoading = useSelector(getCommentsLoadingStatus());
   const comments = useSelector(getComments());
-  const { createComment, removeComment } = useComments();
+
+  useEffect(() => {
+    dispatch(loadCommentsList(pageId));
+  }, [pageId]);
   // console.log(comments);
 
   const handleRemoveComment = (commentId) => {
-    removeComment(commentId);
+    dispatch(removeComment(commentId));
     // api.comments.remove(commentId).then((commentId) => {
     //   setComments(comments.filter((comment) => comment._id !== commentId));
     // });
   };
 
   const handleAddComment = (data) => {
-    createComment(data);
+    dispatch(createComment({ ...data, pageId }));
+    // console.log({ ...data, pageId });
     // api.comments
     //   .add({ ...data, pageId: userId })
     //   .then((data) => setComments([...comments, data]));
